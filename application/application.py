@@ -7,8 +7,8 @@ from .layout_base import LayoutBase
 
 
 class Application:
-    app: Blocks = None
-    children: LayoutBase = []
+    app: Blocks
+    children: list[LayoutBase]
 
     def __init__(
         self,
@@ -35,6 +35,8 @@ class Application:
             delete_cache=delete_cache,
             **kwargs,
         )
+
+        self.children = []
 
     def add(self, child: LayoutBase):
         self.children.append(child)
