@@ -2,6 +2,7 @@
 Wrapping [gradio](https://www.gradio.app/) to create gradio applications with more flexible and clean implementations.
 
 - [wrap\_gradio](#wrap_gradio)
+  - [Features](#features)
   - [Description](#description)
     - [LayoutBase](#layoutbase)
       - [Variables](#variables)
@@ -10,6 +11,11 @@ Wrapping [gradio](https://www.gradio.app/) to create gradio applications with mo
       - [Variables](#variables-1)
       - [Functions- wrap\_gradio](#functions--wrap_gradio)
   - [Example](#example)
+
+## Features
+- You can access the components global in the ```attach_event``` functions.
+- You can structure your gradio application more readable and it can be maintained easily.
+- You can reuse your components across the application.
 
 ## Description
 
@@ -72,6 +78,7 @@ def attach_event(self, block_dict: Dict[str, Block]) -> None:
 
 #### Functions- [wrap\_gradio](#wrap_gradio)
 - [wrap\_gradio](#wrap_gradio)
+  - [Features](#features)
   - [Description](#description)
     - [LayoutBase](#layoutbase)
       - [Variables](#variables)
