@@ -13,25 +13,25 @@ Wrapping [gradio](https://www.gradio.app/) to create gradio applications with mo
   - [Example](#example)
 
 ## Features
-- You can access the components global in the ```attach_event``` functions.
+- You have global access to all of the components in the ```attach_event``` functions.
 - You can structure your gradio application more readable and it can be maintained easily.
 - You can reuse your components across the application.
 
 ## Description
 
 - Main classes that used for warping are ```LayoutBase``` and ```Application```.
-- So lets see their variables and functions and how they are implemented.
+- Below parts are describing their variables, functions and how they are implemented.
 
 ### LayoutBase
 - This class is a base class for the layouts which are ```RowLayout```, ```ColumnLayout```, ```TabLayout```.
   
 #### Variables
-|       Variable       |              Type              | Definition                                                                                                                                |
-| :------------------: | :----------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------- |
-|     main_layout      |      gradio.blocks.Block       | Stores the main layout from the gradio package of this class. For example storing ```Row``` layout for the ```RowLayout``` class.         |
-|         name         |              str               | Name for the class. Just for differantiate from other classes and debug purposes.                                                         |
-| global_children_dict | Dict[str, gradio.blocks.Block] | Stores the children components from the below layouts. Its values are accumulating with each parent.                                      |
-|     renderables      |              list              | Stores the renderable elements. Layout and children is not seperated because the order is important so containing all of them in one list |
+|       Variable       |              Type              | Definition                                                                                                                                                       |
+| :------------------: | :----------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     main_layout      |      gradio.blocks.Block       | Stores the main layout from the gradio package of this class. For example storing ```gradio.Row``` layout for the ```RowLayout``` class.                         |
+|         name         |              str               | Name of the class. Using for differantiate from other classes and debug purposes.                                                                                |
+| global_children_dict | Dict[str, gradio.blocks.Block] | Stores the children components with name. Its values are accumulating with each upper parent.                                                                    |
+|     renderables      |              list              | Stores the renderable elements. Layout and children components are not seperated because the order is important. So containing all of them in one list variable. |
 
 #### Functions
 
@@ -51,8 +51,8 @@ def add_layout(self, layout: LayoutBase) -> None:
     self.renderables.append(layout)
     self.global_children_dict.update(layout.global_children_dict)
 ```
-- In this function, new layout, which is derived from this class, is added.
-- As you can see, ```global_children_dict``` variable is updating the dictionary with the added new layout. With this functionality, the parent has the all components that children layouts have. You can see in the ```attach_event``` function why this is important.
+- In this function, new layout is added as children component.
+- As you can see, ```global_children_dict``` variable is updating the dictionary with the added new layout's ```global_children_dict``` variable. With this functionality, the parent class includes all the components that children layouts have. You can see in the ```_attach_event``` function why this is important.
 
 ------------------------------------------
 ```python
@@ -64,8 +64,8 @@ def render(self) -> None:
     self.main_layout.render()
 ```
 - In this function, components in the ```renderables``` are rendered under the ```main_layout``` variable.
-- Now the crucial part, ```with``` functionality in the ```gradio.blocks.Block``` is setting the ```Context.block```. Why it is important? It is important because we are rendering not as we are initialize but after with ```render``` function, we have to set the ```Context.block``` to render the component as we wanted. If we did not use the ```with``` functionality then the components are rendered with as column style. Why? Because the default style is column style.
-- Now as we render the ```renderables```, we render the ```main_layout```. Because we have just rendered the children components, or ```renderables``` as their variable name, so we have to render the main ```Context.block``` as well.
+- ```with``` functionality in the ```gradio.blocks.Block``` is setting the ```Context.block```. This syntax is important because we are rendering not as we initialize the component but after with ```render``` function. So we have to set the ```Context.block``` to render the component as we wanted. If we did not use the ```with``` functionality then the components are rendered with the column style. Why? Because the default style is column style.
+- We render the ```renderables``` and then we render the ```main_layout``` because we have just rendered the children components, or ```renderables``` as their variable name, so we have to render the main ```Context.block``` as well.
 
 ------------------------------------------
 ```python
@@ -73,7 +73,7 @@ def attach_event(self, block_dict: Dict[str, Block]) -> None:
     raise NotImplementedError
 ``` 
 - The ```attach_event``` function is leaved as not implemented because it is more specific to class so each class has to implement their ```attach_event``` function.
-- You can see what is the ```block_dict``` variable in the ```attach_event``` function in the ```Application``` class.
+- You can see what is the ```block_dict``` variable in the ```_attach_event``` function in the ```Application``` class.
 
 ### Application
 - Base class for the application. You can add the layouts and launch the program.
@@ -96,7 +96,7 @@ def _render(self):
 
     self.app.render()
 ```
-- As we can see from the ```render``` function from the ```LayoutBase``` class, this ```render``` function is implemented as same as other ```render``` function.
+- As we can see from the ```render``` function from the ```LayoutBase``` class, this ```_render``` function is implemented as same as the ```render``` function.
 
 ------------------------------------------
 ```python
@@ -114,8 +114,8 @@ def _attach_event(self):
                 print(f"{child.name}'s attach_event is not implemented")
 ```
 - In this function, the components are gathered in one dictionary and passed to all children with ```attach_event``` function.
-- You can see why the ```global_children_list``` is used in the ```LayoutBase``` class. With this, all of the components in the application is gathered in one dictionary so the component can access all the components with names which is used with inserting into directory.
-- If the layout is not implent the ```attach_event``` function, the class prints a message with the name which is assigned to inform the developer.
+- You can see why the ```global_children_list``` is used in the ```LayoutBase``` class. With this, all of the components in the application is gathered into one dictionary so the component can access all the components with names which is used with inserting into dictionary.
+- If the layout is not implent the ```attach_event``` function, the class prints a message with the name which is assigned in the class to inform the developer.
 ------------------------------------------
 - ```launch``` function is not interested one because it is just calling the ```_render``` and ```_attach_event``` functions with the ```launch``` function from the ```gradio.Blocks``` class and starts the application.
 
