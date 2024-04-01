@@ -7,6 +7,10 @@ from typing import Dict
 from gradio.blocks import Block
 
 
+def change_text(new_str: str):
+    return Textbox(value=new_str)
+
+
 class FirstTab(TabLayout):
     def __init__(
         self,
@@ -32,9 +36,6 @@ class FirstTab(TabLayout):
         self.add_layout(self.row)
 
     def attach_event(self, block_dict: Dict[str, Block]) -> None:
-        def change_text(new_str: str):
-            return Textbox(value=new_str)
-
         self.left_textbox.change(
             change_text,
             inputs=block_dict["left_textbox"],
@@ -63,6 +64,13 @@ class SecondTab(TabLayout):
         self.column.add_component("bottom_textbox", self.bottom_textbox)
 
         self.add_layout(self.column)
+
+    def attach_event(self, block_dict: Dict[str, Block]) -> None:
+        block_dict["left_textbox"].change(
+            change_text,
+            inputs=block_dict["left_textbox"],
+            outputs=block_dict["bottom_textbox"],
+        )
 
 
 if __name__ == "__main__":
