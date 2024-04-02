@@ -60,7 +60,7 @@ class ColumnLayout(LayoutBase):
 class TabLayout(LayoutBase):
     def __init__(
         self,
-        label: str | None = "Tab",
+        name: str,
         visible: bool = True,
         interactive: bool = True,
         id: int | str | None = None,
@@ -70,7 +70,7 @@ class TabLayout(LayoutBase):
         super().__init__()
 
         self.main_layout = Tab(
-            label=label,
+            label=name,
             visible=visible,
             interactive=interactive,
             id=id,
@@ -79,4 +79,4 @@ class TabLayout(LayoutBase):
             render=False,
         )
 
-        self.global_children_dict[label] = self.main_layout
+        self.global_children_dict[name] = self.main_layout
