@@ -69,7 +69,7 @@ class SecondTab(TabLayout):
         block_dict["left_textbox"].change(
             change_text,
             inputs=block_dict["left_textbox"],
-            outputs=block_dict["bottom_textbox"],
+            outputs=self.bottom_textbox,
         )
 
 
