@@ -1,5 +1,5 @@
-from application.application import Application
-from application.layouts import RowLayout, TabLayout, ColumnLayout
+from wrap_gradio.application import Application
+from wrap_gradio.layouts import RowLayout, TabLayout, ColumnLayout
 
 from gradio import Textbox
 
@@ -57,10 +57,10 @@ class SecondTab(TabLayout):
 
         self.column = ColumnLayout()
 
-        self.upper_textbox = Textbox(value="Upper Textbox", interactive=True)
+        self.top_textbox = Textbox(value="Top Textbox", interactive=True)
         self.bottom_textbox = Textbox(value="Bottom Textbox")
 
-        self.column.add_component("upper_textbox", self.upper_textbox)
+        self.column.add_component("top_textbox", self.top_textbox)
         self.column.add_component("bottom_textbox", self.bottom_textbox)
 
         self.add_layout(self.column)

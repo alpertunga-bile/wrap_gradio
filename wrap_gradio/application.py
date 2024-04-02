@@ -65,4 +65,4 @@ class Application:
         self._render()
         self._attach_event()
 
-        # self.app.launch(args)
+        self.app.launch(args)
