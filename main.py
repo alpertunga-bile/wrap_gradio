@@ -23,7 +23,7 @@ class FirstTab(TabLayout):
     ) -> None:
         super().__init__(label, visible, interactive, id, elem_id, elem_classes)
 
-        self.row = RowLayout()
+        self.row = RowLayout(name="first tab row layout")
 
         self.left_textbox = Textbox(
             value="Left Textbox", interactive=True, render=False
@@ -55,7 +55,7 @@ class SecondTab(TabLayout):
     ) -> None:
         super().__init__(label, visible, interactive, id, elem_id, elem_classes)
 
-        self.column = ColumnLayout()
+        self.column = ColumnLayout(name="second tab column layout")
 
         self.top_textbox = Textbox(value="Top Textbox", interactive=True)
         self.bottom_textbox = Textbox(value="Bottom Textbox")
