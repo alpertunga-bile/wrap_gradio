@@ -9,7 +9,6 @@ from .layout_base import LayoutBase
 class Application:
     app: Blocks
     children: list[LayoutBase]
-    block_dict: Dict[str, Block]
 
     def __init__(
         self,
@@ -51,21 +50,27 @@ class Application:
         self.app.render()
 
     def _attach_event(self):
+        block_dict: Dict[str, Block] = {}
+
         for child in self.children:
-            self.block_dict.update(child.global_children_dict)
+            block_dict.update(child.global_children_dict)
 
         with self.app:
             for child in self.children:
                 try:
-                    child.attach_event(block_dict=self.block_dict)
+                    child.attach_event(block_dict=block_dict)
                 except NotImplementedError:
                     print(f"{child.name}'s attach_event is not implemented")
 
     def _clear(self):
+        from gc import collect
+
         for child in self.children:
             child.clear()
 
         self.children.clear()
+
+        collect()
 
     def launch(self, **args):
         self._render()
