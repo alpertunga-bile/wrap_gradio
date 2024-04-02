@@ -31,5 +31,14 @@ class LayoutBase:
 
         self.main_layout.render()
 
+    def clear(self) -> None:
+        self.global_children_dict.clear()
+
+        for renderable in self.renderables:
+            if isinstance(renderable, LayoutBase):
+                renderable.clear()
+
+        self.renderables.clear()
+
     def attach_event(self, block_dict: Dict[str, Block]) -> None:
         raise NotImplementedError
