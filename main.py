@@ -14,14 +14,14 @@ def change_text(new_str: str):
 class FirstTab(TabLayout):
     def __init__(
         self,
-        label: str | None = None,
+        name: str,
         visible: bool = True,
         interactive: bool = True,
         id: int | str | None = None,
         elem_id: str | None = None,
         elem_classes: list[str] | str | None = None,
     ) -> None:
-        super().__init__(label, visible, interactive, id, elem_id, elem_classes)
+        super().__init__(name, visible, interactive, id, elem_id, elem_classes)
 
         self.row = RowLayout(name="first tab row layout")
 
@@ -46,14 +46,14 @@ class FirstTab(TabLayout):
 class SecondTab(TabLayout):
     def __init__(
         self,
-        label: str | None = None,
+        name: str,
         visible: bool = True,
         interactive: bool = True,
         id: int | str | None = None,
         elem_id: str | None = None,
         elem_classes: list[str] | str | None = None,
     ) -> None:
-        super().__init__(label, visible, interactive, id, elem_id, elem_classes)
+        super().__init__(name, visible, interactive, id, elem_id, elem_classes)
 
         self.column = ColumnLayout(name="second tab column layout")
 
@@ -76,8 +76,8 @@ class SecondTab(TabLayout):
 if __name__ == "__main__":
     gui = Application(title="Wrap Gradio")
 
-    first_tab = FirstTab(label="First Tab")
-    second_tab = SecondTab(label="Second Tab")
+    first_tab = FirstTab(name="First Tab")
+    second_tab = SecondTab(name="Second Tab")
 
     gui.add(first_tab)
     gui.add(second_tab)
