@@ -18,17 +18,18 @@ Wrapping [gradio](https://www.gradio.app/) to create applications with more flex
 ## Features
 
 - You have global access to all of the components in the ```attach_event``` functions.
-- You can structure your gradio application more readable and it can be maintained easily.
+- You can structure your application more readable and it can be maintained easily.
+- All additional components have cleared at launch state so your program is launched nearly same as the default implementation.
 - You can reuse your components across the application.
 
 ## Usage
 
-- [x] You can see the example from the ```main.py``` file.
+- [x] You can see the example in the ```main.py``` file.
 
 - Create a main application with the ```warp_gradio.application.Application``` class.
 - Use the layouts from the ```warp_gradio.layouts``` rather than ```gradio``` package. You can use ```RowLayout```, ```ColumnLayout``` and ```TabLayout``` classes.
   - [x] To use the layouts with the ```attach_event``` function, create classes that inherits from these classes. If you are using child layouts which are implented the ```attach_event``` function, call this functions from the parent layouts' ```attach_event``` function.
-- Add the components which are created from the ```gradio``` package to layouts with the ```add_component``` function. Add the layers which are created from the ```war_gradio.layouts``` with the ```add_layout``` function.
+- Add the components which are created from the ```gradio``` package to layouts with the ```add_component``` function. Add the layers which are created from the ```warp_gradio.layouts``` with the ```add_layout``` function.
   - [x] The components have to be created with ```render = false``` parameter, because they are going to be rendered afterwards.
 - Add the layouts to the main application with the ```add``` funciton.
 - Launch the program with the ```launch``` function.
@@ -94,6 +95,23 @@ def render(self) -> None:
 ------------------------------------------
 
 ```python
+def clear(self) -> None:
+    self.global_children_dict.clear()
+
+    for renderable in self.renderables:
+        if isinstance(renderable, LayoutBase):
+            renderable.clear()
+
+    self.renderables.clear()
+```
+
+- In this function, we clear the stored children components and renderables.
+- We don't need them because the ```gradio.blocks.Block``` which is named as ```app``` in the ```Application``` class is storing the rendered components in the ```blocks``` and attached functions in the ```fns``` variables.
+- We choose the layouts from the renderables and call the ```clear``` function of them. With this we can be sure that all the objects that stored are cleaned.
+
+------------------------------------------
+
+```python
 def attach_event(self, block_dict: Dict[str, Block]) -> None:
     raise NotImplementedError
 ```
@@ -153,7 +171,24 @@ def _attach_event(self):
 
 ------------------------------------------
 
-- ```launch``` function is not interested one because it is just calling the ```_render``` and ```_attach_event``` functions with the ```launch``` function from the ```gradio.Blocks``` class and starts the application.
+```python
+def _clear(self):
+    from gc import collect
+
+    for child in self.children:
+        child.clear()
+
+    self.children.clear()
+
+    collect()
+```
+
+- In this function, we completed the cleanup function.
+- We call all the children with their ```clear``` function then clear the ```children``` variable. After that call ```gc.collect``` for memory saving.
+
+------------------------------------------
+
+- ```launch``` function is not interested one because it is just calling the ```_render```, ```_attach_event``` and ```_clear``` functions with the ```launch``` function from the ```gradio.blocks.Blocks``` class and starts the application.
 
 ## Example
 
@@ -193,6 +228,7 @@ Second Tab Right Textbox  ID : 8
 ```
 
 - As you can see from the layout the components are structured as we wanted. But you can see there are additional ids which are 0, 9, 10 and 11.
+- [x] The components can be checked with their ids from the ```gui.app.blocks``` variable.
 
 - The ```id : 0``` is the main application which is ```gradio.blocks.Blocks```.
 - The ```id : 11``` is the ```gradio.layouts.tabs.Tabs``` class. This is inserted here because the ```gradio.layouts.tabs.Tab``` is expecting a parent which is ```gradio.layouts.tabs.Tabs``` class. This can be verified with the ```gradio.layouts.tabs.Tab.get_expected_parent``` function.
