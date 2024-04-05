@@ -39,7 +39,6 @@ class Application:
         )
 
         self.children = []
-        self.block_dict = {}
 
     def add(self, child: LayoutBase):
         self.children.append(child)
