@@ -42,8 +42,8 @@ class RowExample(RowLayout):
     def attach_event(self, block_dict: Dict[str, Block]) -> None:
         self.left_textbox.change(
             change_text,
-            inputs=block_dict["left_textbox"],
-            outputs=block_dict["right_textbox"],
+            inputs=self.left_textbox,
+            outputs=self.right_textbox,
         )
 
 
