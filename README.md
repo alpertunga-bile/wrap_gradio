@@ -2,6 +2,8 @@
 
 Wrapping [gradio](https://www.gradio.app/) to create applications with more flexible and clean implementations.
 
+The guide is added to [gradio guides](https://www.gradio.app/guides/wrapping-layouts).
+
 - [wrap\_gradio](#wrap_gradio)
   - [Features](#features)
   - [Usage](#usage)
